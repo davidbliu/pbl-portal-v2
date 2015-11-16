@@ -3,12 +3,10 @@ app.controller('BlogController', function($scope, $http, BlogService, UtilServic
   $scope.loadingGif = UtilService.loadingGif;
   $scope.loading = false;
   $scope.message = 'hi there from blog controller';
-  function init(){
-    BlogService.allPosts(function(data){
-      $scope.posts = data;
-    });
-  }
-  init();
+  BlogService.allPosts(function(data){
+    $scope.posts = BlogService.convertPosts(data);
+    $scope.$digest();
+  });
   $scope.filterPost = function(post){
     if($scope.searchTerm != post.title){
       $scope.searchTerm = post.title;

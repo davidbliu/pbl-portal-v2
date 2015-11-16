@@ -3,16 +3,15 @@ app.controller('TablingController', function($scope, $http, TablingService, Memb
   $scope.loadingGif = UtilService.loadingGif;
   $scope.gravatarUrl = UtilService.gravatarUrl;
 
-  TablingService.tablingSlots(function(data){
+  TablingService.parseTablingSlots(function(data){
     $scope.tablingSlots = data;
     $scope.tablingHash = TablingService.tablingHash(data);
     $scope.tablingDays = Object.keys($scope.tablingHash);
-    console.log('tabling hash is '+$scope.tablingHash);
-    console.log($scope.tablingHash);
   });
 
-  MemberService.memberHash(function(data){
+  MemberService.parseMemberHash(function(data){
     $scope.memberHash = data;
+    $scope.$digest();
   });
 
   $scope.timeString = function(time){

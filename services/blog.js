@@ -7,11 +7,27 @@ app.service("BlogService",  function($http) {
     serviceInstance.permissionsList = ['Only Me', 'Only Execs', 'Only Officers', 'Only PBL', 'Anyone'];
 
     serviceInstance.allPosts = function(callback){
-        $http.get(tokenizedURL(ROOT_URL+'/all_blogposts'))
-            .success(function(data){
-                callback(data);
-            });
+      query = new Parse.Query(Blog);
+      query.find({
+        success: function(data){
+          callback(data);
+        }
+      });
     };
+
+    serviceInstance.convertPosts =function(posts){
+      r = [];
+      for(var i=0;i<posts.length;i++){
+        p = {};
+        p.title = posts[i].get('title');
+        p.content = posts[i].get('content');
+        p.view_permissions = posts[i].get('view_permissions');
+        p.edit_permissions = posts[i].get('edit_permissions');
+        p.createdAt = posts[i].get('createdAt');
+        r.push(p);
+      }
+      return r;
+    }
 
     serviceInstance.savePost = function(post, callback){
      $http.post(tokenizedURL(ROOT_URL+'/save_blogpost'), post)

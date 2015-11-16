@@ -11,7 +11,8 @@ app.controller('GoController', function($scope, $http, GoService, UtilService) {
     });
   }
   GoService.recentGolinks(function(data){
-    $scope.golinks = data;
+    $scope.golinks = GoService.convertResults(data);
+    $scope.$digest();
   });
   $scope.filterOptions = ['Recent Links', 'My Links', 'Popular Links'];
   $scope.filterOptions = $scope.filterOptions.reverse();

@@ -3,11 +3,31 @@ app.service("GoService",  function($http) {
     var serviceInstance = {};
 
     serviceInstance.recentGolinks = function(callback){
-        $http.get(tokenizedURL(ROOT_URL+'/recent_golinks'))
-            .success(function(data){
-                callback(data);
-            });
+      query = new Parse.Query(Golink);
+      query.descending('createdAt');
+      query.find({
+        success: function(data){
+          callback(data);
+        }
+      });
+        //$http.get(tokenizedURL(ROOT_URL+'/recent_golinks'))
+            //.success(function(data){
+                //callback(data);
+            //});
     };
+
+    serviceInstance.convertResults = function(results){
+      rs = [];
+      for(var i=0;i<results.length;i++){
+        r = {};
+        r.key = results[i].get('key');
+        r.url = results[i].get('url');
+        r.description = results[i].get('description');
+        r.member_email = results[i].get('member_email');
+        rs.push(r);
+      }
+      return rs;
+    }
 
     serviceInstance.myLinks = function(callback){
         $http.get(tokenizedURL(ROOT_URL+'/my_links'))

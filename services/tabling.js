@@ -2,6 +2,21 @@
 
 app.service("TablingService",  function($http, $rootScope) {
     var serviceInstance = {};
+    serviceInstance.parseTablingSlots = function(callback){
+      query = new Parse.Query(TablingSlot);
+      query.find({
+        success: function(results){
+          tablingSlots = [];
+          for(var i=0;i<results.length;i++){
+            tablingSlots.push({'member_emails': results[i].get('member_emails'),
+                              'time': results[i].get('time'), 'objectId': results[i].id});
+          }
+          console.log(tablingSlots);
+          console.log('that was tabling slots');
+          callback(tablingSlots);
+        }});
+    };
+
     serviceInstance.tablingSlots = function(callback){
         if($rootScope.tablingSlots != null){
           callback($rootScope.tablingSlots);
@@ -26,6 +41,8 @@ app.service("TablingService",  function($http, $rootScope) {
         }
         h[day].push(slot);
       }
+      console.log('tabling hash was ');
+      console.log(h);
       return h;
     };
 
