@@ -1,0 +1,26 @@
+<link rel = 'import' href = '/htmlets/header.html'>
+<body ng-app = 'pblApp'>
+<button class = 'btn btn-material-blue-500' id = 'linout' onlick = "toggleLogin()">Login</button>
+<div ng-controller = 'AuthController'>
+  <div ng-show = 'me != null'>
+    <h2>You are logged in as</h2>
+    <ul>
+      <li>name: <a href = './{{me.name}}'>{{me.name}}</a></li>
+      <li>email: {{me.email}}</li>
+      <li>position: {{me.position}}</li>
+    </ul>
+  </div>
+</div>
+
+<script type = 'text/javascript'>
+app.controller('AuthController', function($scope, $http, MemberService) {
+  console.log('this is me');
+  console.log(getCookie('me').email);
+  MemberService.memberHash(function(data){
+    $scope.me = data[authEmail];
+    setCookie('me', $scope.me);
+    console.log('done');
+  });
+});
+</script>
+</body>

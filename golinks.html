@@ -1,0 +1,13 @@
+<link rel = 'import' href = '/htmlets/header.html'>
+<body ng-app = 'pblApp'>
+<button class = 'btn btn-material-blue-500'>Add Link</button>
+  <div ng-controller = 'GoController'>
+    <input type = 'text' class = 'form-control' placeholder = 'search links' ng-model = 'searchTerm'>
+    <table class = 'table'>
+      <tr ng-repeat = 'golink in golinks'>
+        <td>{{golink.key}}</td>
+        <td>{{golink.url}}</td>
+      </tr>
+    </table>
+  </div>
+</body>

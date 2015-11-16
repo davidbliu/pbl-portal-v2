@@ -1,0 +1,8 @@
+<link rel = 'import' href= '/htmlets/header.html'>
+<body ng-app = 'pblApp'>
+<div ng-controller = 'BlogController'>
+  <div ng-repeat = 'post in posts'>
+    <a href = './blogpost?id={{post.objectId}}'>{{post.title}}</a>
+  </div>
+</div>
+</body>

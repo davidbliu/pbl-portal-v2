@@ -1,0 +1,110 @@
+<html>
+
+<head>
+  <title>Frontend</title>
+ <link rel="shortcut icon" type="image/x-icon" href="./images/logo.png" />
+
+  <!--styles-->
+  <link rel = 'stylesheet' href = 'main.css'>
+  <link rel = 'stylesheet' href = './lib/bootstrap.min.css'>
+  <link rel = 'stylesheet' href = './lib/material-fullpalette.min.css'>
+  <link rel = 'stylesheet' href = './lib/Material-Design-Icons.ttf'>
+  <link rel = 'stylesheet' href = './lib/Material-Design-Icons.woff'>
+
+  <!--jquery-->
+  <script src = './lib/jquery.min.js'></script>
+
+  <!--tinymce-->
+  <script src = '//tinymce.cachefly.net/4.2/tinymce.min.js'></script>
+
+  <!--authentication and config-->
+  <script src = './config.js'></script>
+  <script src = './lib/platform.js'></script>
+
+  <!--angular-->
+  <script src = './lib/angular.min.js'></script>
+  <script src = './lib/angular-route.js'></script>
+
+  <script src = './lib/md5.min.js'></script>
+
+  <!--parse-->
+  <script src = './lib/parse-1.6.7.min.js'></script>
+
+ <!--main js script -->
+  <script src = 'auth.js'></script>
+  <script src = 'app.js'></script>
+
+  <!--services-->
+  <script src = './services/members.js'></script>
+  <script src = './services/go.js'></script>
+  <script src = './services/tabling.js'></script>
+  <script src = './services/blog.js'></script>
+  <script src = './services/points.js'></script>
+  <script src = './services/utils.js'></script>
+  <script src = './services/parse.js'></script>
+
+  <!--controllers-->
+  <script src = './controllers/home.js'></script>
+  <script src = './controllers/tabling.js'></script>
+  <script src = './controllers/schedule.js'></script>
+  <script src = './controllers/members.js'></script>
+  <script src = './controllers/go.js'></script>
+  <script src = './controllers/addGolink.js'></script>
+  <script src = './controllers/blog.js'></script>
+  <script src = './controllers/createPost.js'></script>
+  <script src = './controllers/editPost.js'></script>
+  <script src = './controllers/points.js'></script>
+  <script src = './controllers/parse.js'></script>
+  <script src = './controllers/attendance.js'></script>
+
+</head>
+
+<body ng-app = 'pblApp'>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#/">
+        <span><img src = './images/logo.png' style = 'height:35px'></span>
+        <span>[PBL][MP]</span>
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a class = 'nav-link' href="#/golinks">PBL Links</a></li>
+        <li><a class = 'nav-link' href="#/members">Members</a></li>
+        <li><a class = 'nav-link' href="#/points">Points</a></li>
+        <li><a class = 'nav-link' href="#/tabling">Tabling</a></li>
+        <li><a class = 'nav-link' href="#/blog">Blog</a></li>
+        <li><a class = 'nav-link' href="http://pbl.link/wiki">Wiki</a></li>
+        <li><a class = 'nav-link' href="#/fun">Fun</a></li>
+      </ul>
+
+      <div>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href = 'javascript:void(0)' onclick = 'toggleLogin()' id = 'linout'>Login</a></li>
+        </ul>
+      </div>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+  <!--<div class="g-signin2" data-onsuccess="onSignIn"></div>-->
+  <!--<a href="#" onclick="signOut();">Sign out</a>-->
+  <div ng-view=''></div> 
+<footer class="footer" >
+<div class="container text-muted">
+  <p >Created by WD</p>
+  <p> Check out our <a href = 'http://pbl.link/flask-portal'>API Server</a> </p>
+</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<link rel = 'import' href = '/htmlets/header.html'>
+<body ng-app = 'pblApp'>
+  <div ng-controller = 'MembersController'>
+<input type = 'text' class = 'form-control' placeholder = 'Search Members' id = 'search-input' ng-model = 'searchTerm'>
+<div ng-show = 'committeeHash == null'>
+  <img src = '{{loadingGif}}' class = 'loading-gif'>
+</div>
+
+<div ng-show = 'committeeHash != null'>
+  <div class = 'committee-div' ng-repeat = 'committee in committees'>
+    <h2>{{committee}}</h2>
+    <table class = 'table table-condensed'>
+      <thead>
+        <th>Name</th>
+        <th> Committee </th>
+        <th> Role </th>
+        <th> Email </th>
+        <th> Phone </th>
+        <th> Year </th>
+        <th> Major </th>
+      </thead>
+      <tbody>
+        <tr ng-repeat = 'member in committeeHash[committee] | filter:searchTerm'>
+          <td>{{member.name}}</td>
+          <td>{{member.committee}}</td>
+          <td>{{member.role}}</td>
+          <td>{{member.email}}</td>
+          <td>{{member.phone}}</td>
+          <td>{{member.year}}</td>
+          <td>{{member.major}}</td>
+        </tr>
+    </table>
+  </div>
+</div>
+  </div>
+</body>

@@ -1,0 +1,16 @@
+<link rel = 'import' href = '/htmlets/header.html'>
+
+<a href = './attendance'><button class = 'btn btn-material-blue-500'>Mark Attendance</button></a>
+
+<body ng-app = 'pblApp'>
+<div ng-controller = 'PointsController'>
+<div ng-show = 'myPoints != null'>
+  <h2>You have {{myPoints.points}} Points</h2>
+  {{email}}
+  <h2>Attendance</h2>
+  <div ng-repeat = 'event in myPoints.attendance'>
+    {{event.name}}: {{event.points}}
+  </div>
+</div>
+</div>
+</body>

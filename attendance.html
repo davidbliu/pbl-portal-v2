@@ -1,0 +1,37 @@
+<link rel = 'import' href = '/htmlets/header.html'>
+<body ng-app = 'pblApp'>
+<div ng-controller = 'AttendanceController'>
+<style type = 'text/css'>
+.none{
+  color:black;
+}
+.chair{
+  color: green;
+}
+.cm{
+  color:blue;
+}
+.event-member:hover{
+  cursor:pointer;
+}
+</style>
+  <div ng-show = 'events == null || attendance == null'>
+    <img src = '{{loadingGif}}' class = 'loading-gif'>
+  </div>
+  <div ng-show = 'events != null && attendance != null'>
+    <div>
+      <input type = 'text' class = 'form-control' placeholder = 'Search Members' ng-model = 'memberSearch'>
+    </div>
+    <div>
+      <input type = 'text' class = 'form-control' placeholder = 'Search Events' ng-model = 'eventSearch'>
+    </div>
+    <div ng-repeat = 'event in events | filter:eventSearch'>
+      <h3>{{event.name}} ({{event.start_time}})</h3>
+      <ul>
+        <li  ng-repeat = 'email in coCMs | filter:memberSearch' class = 'event-member {{attendedEvent(email, event.google_id)}}' ng-click = 'recordAttendance($event, event, email)' data-email = '{{email}}' data-eid = '{{event.google_id}}'>{{email}}</li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+</body>
