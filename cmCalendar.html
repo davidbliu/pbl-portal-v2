@@ -1,0 +1,18 @@
+<link rel = 'import' href = '/htmlets/header.html'>
+
+<body ng-app = 'pblApp'>
+  <div ng-controller = 'CalendarController'>
+    <div>
+      <h2>Attendance</h2>
+      <h2>{{event.title}} ({{event.points}})</h2>
+      <div>
+        <button class = 'btn'>I attended this event</button>
+      </div>
+    </div>
+    <div ng-if = 'eventSources != null && eventSources.length > 0'>
+      <div id = 'calendar' ui-calendar='uiConfig.calendar' ng-model = 'eventSources'></div>
+    </div>
+  </div>
+
+  
+</body>

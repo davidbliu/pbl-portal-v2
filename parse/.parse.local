@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "PBL Portal": {
+      "applicationId": "XIpP60GkEQF4bQtKFOcceguywNhzOs3Lpsw1H17Z"
+    },
+    "_default": {
+      "link": "PBL Portal"
+    }
+  }
+}

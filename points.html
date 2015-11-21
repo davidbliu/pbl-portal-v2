@@ -3,7 +3,7 @@
 <div ng-controller = 'PointsController'>
 <div ng-show = 'myPoints != null'>
   <h4>You have {{myPoints.points}} Points</h4>
-  {{email}}
+  {{myEmail}}
   <h4>Attendance</h4>
   <div ng-repeat = 'event in myPoints.attendance'>
     {{event.name}}: {{event.points}}

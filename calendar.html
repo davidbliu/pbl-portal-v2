@@ -1,15 +1,37 @@
+<style type = 'text/css'>
+.committee-div{
+  float:left;
+    margin-left:20px;
+}
+.chair{
+  color:blue;
+}
+.cm{
+  color:orange;
+}
+</style>
 <link rel = 'import' href = '/htmlets/header.html'>
 
 <body ng-app = 'pblApp'>
   <div ng-controller = 'CalendarController'>
     <div>
       <h2>Attendance</h2>
-      <div ng-repeat = 'em in eventMembers'>{{em.member_email}} {{em.type}}</div>
+      <h2>{{event.title}}</h2>
+      <div class = 'committee-div'  ng-repeat = 'committee in committees'>
+        <h4>{{committee}}</h4>
+        <div ng-repeat = 'member in committeeHash[committee]' class = 'member-div' data-email = '{{member.email}}' ng-click = 'recordAttendance($event, member.email)'>
+          {{member.name}}
+        </div>
+      </div>
+      <!--<div ng-repeat = 'em in eventMembers'>{{memberHash[em.member_email].name}} {{em.type}}</div>-->
     </div>
-    <div ng-if = 'eventSources != null && eventSources.length > 0'>
+    <div class = 'block' ng-if = 'eventSources != null && eventSources.length > 0'>
       <div id = 'calendar' ui-calendar='uiConfig.calendar' ng-model = 'eventSources'></div>
     </div>
+    <!--end of calendar insie-->
   </div>
+  <!--end of calendar controller-->
+
 
   
 </body>

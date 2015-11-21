@@ -33,16 +33,32 @@ app.service("MemberService",  function($http, $rootScope) {
     };
 
     serviceInstance.memberHash = function(callback){
-      query = new Parse.Query(Member);
-      query.limit(MAXINT);
-      query.exists('email');
-      query.find({
-        success: function(results){
-          hash= getMemberHash(convertMembers(results));
-          callback(hash);
+      Parse.Cloud.run('memberHash', {email:'alice.sun94@gmail.com'}, {
+        success:function(data){
+          callback(data);
         }
       });
     }
+
+    serviceInstance.committeeHash = function(callback){
+      Parse.Cloud.run('committeeHash', {}, {
+        success:function(data){
+          callback(data);
+        }
+      });
+    }
+
+    //serviceInstance.memberHash = function(callback){
+      //query = new Parse.Query(Member);
+      //query.limit(MAXINT);
+      //query.exists('email');
+      //query.find({
+        //success: function(results){
+          //hash= getMemberHash(convertMembers(results));
+          //callback(hash);
+        //}
+      //});
+    //}
     
    serviceInstance.getMemberHash = function(members){
      h = {};
@@ -64,6 +80,7 @@ app.service("MemberService",  function($http, $rootScope) {
         }
         return h;
     }; 
+
     return serviceInstance;
 });
 
@@ -85,3 +102,10 @@ function convertMembers(parseMembers){
   }
   return members;
 }
+ function getMemberHash(members){
+   h = {};
+   for (var i=0;i<members.length;i++){
+     h[members[i].email] = members[i];
+   }
+   return h
+ };

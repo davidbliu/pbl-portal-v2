@@ -1,13 +1,11 @@
 
 app.controller('MembersController', function($scope, $http, MemberService, UtilService) {
-  MemberService.currentMembers(function(data){
-    
-    $scope.currentMembers = data;
-    console.log(data);
-    $scope.committeeHash = MemberService.getCommitteeHash(data);
-    $scope.committees = Object.keys($scope.committeeHash);
+  MemberService.committeeHash(function(data){
+    $scope.committeeHash = data;
+    $scope.committees = Object.keys(data);
     $scope.$digest();
   });
+
   $scope.currentMembers = [];
   $scope.gravatarUrl = UtilService.gravatarUrl;
   $scope.loadingGif = UtilService.loadingGif; 

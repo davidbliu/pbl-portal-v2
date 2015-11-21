@@ -2,6 +2,13 @@
 
 app.service("PointsService",  function($http) {
     var serviceInstance = {};
+
+    serviceInstance.points = function(myEmail, callback){
+      Parse.Cloud.run("points", {email: myEmail}, 
+                      {success:function(data){
+                       console.log(data);
+                      }}); 
+    };
     serviceInstance.events = function(callback){
       query = new Parse.Query(Event);
       query.limit(10000);
@@ -29,38 +36,53 @@ app.service("PointsService",  function($http) {
       }});
     };
 
-    serviceInstance.parseMemberPoints = function(email, callback){
-      emQuery = new Parse.Query(EventMember); 
-      emQuery.equalTo('member_email', email);
-      emQuery.find({
-        success:function(data){
-          eids = [];
-          for(var i=0;i<data.length;i++){
-            eids.push(data[i].get('event_id'));
-          }
-          eQuery = new Parse.Query(Event);
-          eQuery.containedIn('google_id', eids);
-          eQuery.find({
-            success:function(results){
-              points = 0;
-              attendance = [];
-              for (var i=0;i<results.length;i++){
-                pts = results[i].get('points') || 0;
-                points = points + pts;
-                event = {};
-                event.name = results[i].get('name');
-                event.points = results[i].get('points');
-                attendance.push(event);
-              }
-              r = {};
-              r.attendance = attendance;
-              r.points = points;
-              callback(r);
-            }
-          });
-        }
-      });
+    serviceInstance.runHello = function(){
+      Parse.Cloud.run('hello', null, {success:function(data){
+        console.log('success');
+          console.log(data);
+      }});
     };
+
+    serviceInstance.points = function(email, callback){
+      Parse.Cloud.run("points", {email:email}, 
+                      {
+                        success:function(data){
+                          callback(data);
+                        }
+                      });
+    };
+    //serviceInstance.parseMemberPoints = function(email, callback){
+      //emQuery = new Parse.Query(EventMember); 
+      //emQuery.equalTo('member_email', email);
+      //emQuery.find({
+        //success:function(data){
+          //eids = [];
+          //for(var i=0;i<data.length;i++){
+            //eids.push(data[i].get('event_id'));
+          //}
+          //eQuery = new Parse.Query(Event);
+          //eQuery.containedIn('google_id', eids);
+          //eQuery.find({
+            //success:function(results){
+              //points = 0;
+              //attendance = [];
+              //for (var i=0;i<results.length;i++){
+                //pts = results[i].get('points') || 0;
+                //points = points + pts;
+                //event = {};
+                //event.name = results[i].get('name');
+                //event.points = results[i].get('points');
+                //attendance.push(event);
+              //}
+              //r = {};
+              //r.attendance = attendance;
+              //r.points = points;
+              //callback(r);
+            //}
+          //});
+        //}
+      //});
+    //};
     return serviceInstance;
 });
 function convertEventMember(parseEventMember){
@@ -92,3 +114,4 @@ function convertEvents(parseEvents){
   }
   return events;
 }  
+
