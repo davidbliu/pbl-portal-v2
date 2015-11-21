@@ -66,3 +66,7 @@ form control edits
   color:white
 
 }
+.block{
+  display:block;
+  clear:both;
+}

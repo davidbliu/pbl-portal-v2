@@ -2,6 +2,33 @@
 
 app.service("PointsService",  function($http) {
     var serviceInstance = {};
+    serviceInstance.events = function(callback){
+      query = new Parse.Query(Event);
+      query.limit(10000);
+      query.descending('start_time');
+      query.find({
+        success:function(data){
+          events = convertEvents(data);
+          callback(events);
+        }
+      });
+    };
+    serviceInstance.getEventHash = function(events){
+     h = {};
+     for(var i=0;i<events.length;i++){
+       h[events[i].event_id] = events[i];
+     }
+     return h;
+    };  
+
+    serviceInstance.eventAttendance = function(event_id, callback){
+      q = new Parse.Query(EventMember);
+      q.equalTo('event_id', event_id);
+      q.find({success:function(data){
+        callback(convertEventMembers(data));
+      }});
+    };
+
     serviceInstance.parseMemberPoints = function(email, callback){
       emQuery = new Parse.Query(EventMember); 
       emQuery.equalTo('member_email', email);
@@ -11,8 +38,6 @@ app.service("PointsService",  function($http) {
           for(var i=0;i<data.length;i++){
             eids.push(data[i].get('event_id'));
           }
-          console.log('these are your eids');
-          console.log(eids);
           eQuery = new Parse.Query(Event);
           eQuery.containedIn('google_id', eids);
           eQuery.find({
@@ -20,7 +45,6 @@ app.service("PointsService",  function($http) {
               points = 0;
               attendance = [];
               for (var i=0;i<results.length;i++){
-                console.log(results[i].get('points'));
                 pts = results[i].get('points') || 0;
                 points = points + pts;
                 event = {};
@@ -37,27 +61,34 @@ app.service("PointsService",  function($http) {
         }
       });
     };
-    serviceInstance.getMemberPoints = function(email, callback){
-        $http.get(tokenizedURL(ROOT_URL+'/get_member_points?email='+encodeURIComponent(email)))
-            .success(function(data){
-                callback(data);
-            });
-    };
-    serviceInstance.getEvents = function(callback){
-      $http.get(tokenizedURL(ROOT_URL+'/events'))
-        .success(function(data){
-          callback(data);
-        });
-    };
-    serviceInstance.getEventHash = function(callback){
-      $http.get(tokenizedURL(ROOT_URL+'/events'))
-        .success(function(data){
-          h = {};
-          for(var i=0;i<data.length;i++){
-            h[data[i].google_id] = data[i];
-          }
-          callback(h);
-        });
-    };
     return serviceInstance;
 });
+function convertEventMember(parseEventMember){
+  return {'member_email': parseEventMember.get('member_email'),
+    'event_id': parseEventMember.get('event_id'),
+    'type': parseEventMember.get('type')}
+}
+function convertEventMembers(ems){
+  return _.map(ems, function(x){
+    return convertEventMember(x);
+  });
+}
+
+function convertEvent(parseEvent){
+  e = {};
+  e.event_id = parseEvent.get('google_id');
+  e.name = parseEvent.get('name');
+  e.points = parseEvent.get('points');
+  e.start_time = parseEvent.get('start_time');
+  e.google_id = parseEvent.get('google_id');
+  e.objectId = parseEvent.id;
+  return e;
+}
+function convertEvents(parseEvents){
+  events = [];
+  for(var i=0;i<parseEvents.length;i++){
+    c = convertEvent(parseEvents[i]);
+    events.push(c);
+  }
+  return events;
+}  

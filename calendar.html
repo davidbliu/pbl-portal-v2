@@ -1,0 +1,15 @@
+<link rel = 'import' href = '/htmlets/header.html'>
+
+<body ng-app = 'pblApp'>
+  <div ng-controller = 'CalendarController'>
+    <div>
+      <h2>Attendance</h2>
+      <div ng-repeat = 'em in eventMembers'>{{em.member_email}} {{em.type}}</div>
+    </div>
+    <div ng-if = 'eventSources != null && eventSources.length > 0'>
+      <div id = 'calendar' ui-calendar='uiConfig.calendar' ng-model = 'eventSources'></div>
+    </div>
+  </div>
+
+  
+</body>

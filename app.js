@@ -1,5 +1,5 @@
 var ROOT_URL = 'http://wd.berkeley-pbl.com:3000'
-var app = angular.module('pblApp',[]);
+var app = angular.module('pblApp',['ui.calendar']);
 app.filter('to_trusted', ['$sce', function($sce){
     return function(text) {
         return $sce.trustAsHtml(text);
