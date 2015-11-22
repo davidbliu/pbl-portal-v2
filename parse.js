@@ -5,3 +5,4 @@ var Blog = Parse.Object.extend("BlogPost");
 var Event = Parse.Object.extend("ParseEvent");
 var EventMember = Parse.Object.extend("ParseEventMember");
 var TablingSlot = Parse.Object.extend("ParseTablingSlot");
+var Attendance = Parse.Object.extend("Attendance");

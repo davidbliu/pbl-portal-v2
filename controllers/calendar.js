@@ -35,14 +35,15 @@ app.controller('CalendarController', function($scope, $http, MemberService, Poin
       return [x.member_email, x];
     }));
     $('.member-div').each(function(){
+      $(this).removeClass('chair');
+      $(this).removeClass('cm');
       email = $(this).attr('data-email');
       em = ems[email];
       if(em != null){
-        $(this).removeClass('chair');
-        $(this).removeClass('cm');
         $(this).addClass(em.type);
       }
     });
+    window.scrollTo(0,0);
   };
 
 
@@ -102,6 +103,7 @@ app.controller('CalendarController', function($scope, $http, MemberService, Poin
     };
   $scope.eventAttendance= function(event_id){
     PointsService.eventAttendance(event_id, function(data){
+      console.log('recoloring events '+data.length);
       $scope.eventMembers = data;
       recolor(data);
     });
