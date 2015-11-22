@@ -29,10 +29,10 @@ app.service("PointsService",  function($http) {
     };  
 
     serviceInstance.eventAttendance = function(event_id, callback){
-      q = new Parse.Query(EventMember);
-      q.equalTo('event_id', event_id);
+      q = new Parse.Query(Attendance);
+      q.containedIn('event_ids', [event_id]);
       q.find({success:function(data){
-        callback(convertEventMembers(data));
+        callback(convertAttendances(data));
       }});
     };
 
@@ -85,6 +85,18 @@ app.service("PointsService",  function($http) {
     //};
     return serviceInstance;
 });
+function convertAttendance(pa){
+  a = {};
+  a.member_email = pa.get('member_email');
+  a.event_ids = pa.get('event_ids');
+  return a;
+}
+function convertAttendances(pas){
+  as =  _.map(pas, function(x){
+    return convertAttendance(x);
+  });
+  return as;
+}
 function convertEventMember(parseEventMember){
   return {'member_email': parseEventMember.get('member_email'),
     'event_id': parseEventMember.get('event_id'),

@@ -31,16 +31,15 @@ app.controller('CalendarController', function($scope, $http, MemberService, Poin
 
   //recolor
   function recolor(eventMembers){
-    ems = _.object(_.map(eventMembers, function(x){
-      return [x.member_email, x];
-    }));
+    emails = _.map(eventMembers, function(x){
+      return x.member_email;
+    });
     $('.member-div').each(function(){
       $(this).removeClass('chair');
       $(this).removeClass('cm');
       email = $(this).attr('data-email');
-      em = ems[email];
-      if(em != null){
-        $(this).addClass(em.type);
+      if(emails.indexOf(email)!=-1){
+        $(this).addClass('chair');
       }
     });
     window.scrollTo(0,0);
