@@ -1,52 +1,59 @@
 
 app.controller('RankingsController', function($scope, $http, MemberService, PointsService, UtilService) {
-  MemberService.committeeHash(function(data){
-    $scope.committeeHash = data;
-  });
-  PointsService.events(function(data){
-    $scope.events=data;
-  });
-  //get all event members
-  MAXINT = 100000;
-  
-  function eventMembers(event_ids, callback){
-    q = new Parse.Query("ParseEventMember");
-    q.limit(MAXINT);
-    q.containedIn('event_id', event_ids);
-    q.equalTo("type", "chair");
-    q.find({
-      success:function(data){
-        callback(convertEventMembers(data));
-      }
-    });
-  }
-  function getEvents(callback){
-    q = new Parse.Query("ParseEvent");
-    q.limit(MAXINT);
-    q.equalTo('semester_name', 'Fall 2015');
-    q.find({
-      success:function(data){
-        callback(convertEvents(data));
-      }
-    });
-  };           
-  function getMembers(callback){
-    MemberService.memberHash(callback);
-  }
-  function allPoints(){
-    //get events, get members, get event members
-    getEvents(function(eventsData){
-      console.log('eventsData '+eventsData.length);
-      getMembers(function(membersData){
-        console.log('membersData '+membersData.length);
-        eids = _.map(eventsData, function(x){
-          return x.google_id;
+  MemberService.memberHash(function(data){
+    $scope.memberHash = data;
+    $scope.$digest();
+
+    PointsService.attendance(function(attendance){
+      PointsService.events(function(events){
+        eventHash = PointsService.getEventHash(events);
+        _.each(attendance, function(a){
+          points = 0;
+          _.each(a.event_ids, function(eid){
+            pts = eventHash[eid].points || 0; 
+            points += pts;
+          });
+          a.points = points;
         });
-        eventMembers(eids, function(emData){
-          console.log('event members ' + emData.length);
+        attendance = _.sortBy(attendance, function(x){
+          return -x.points;
         });
+        $scope.attendance = attendance;
+        $scope.cmAttendance = _.filter(attendance, function(x){
+          return $scope.memberHash[x.member_email].position == 'cm';
+        });
+        $scope.ofAttendance = _.filter(attendance, function(x){
+          return $scope.memberHash[x.member_email].position != 'cm';
+        });
+        scores = getRankings(attendance, $scope.memberHash);
+        $scope.committees = scores[0];
+        $scope.committeeScores = scores[1];
+        $scope.$digest();
       });
     });
-  }
-  allPoints();
+
+  });
 });
+
+function getRankings(attendance, memberHash){
+  committeeScores = {};
+  seen = [];
+  _.each(attendance, function(x){
+    committee = memberHash[x.member_email].committee;
+    if(seen.indexOf(committee) == -1){
+      committeeScores[committee] = [0, 0, 0];
+      seen.push(committee);
+    }
+    score = committeeScores[committee];
+    score[0]++;
+    score[1] = score[1]+x.points;
+    score[2] = score[1]/score[0];
+    committeeScores[committee] = score;
+  });
+  committees = Object.keys(committeeScores);
+  committees = _.sortBy(committees, function(x){
+    return -committeeScores[x][2];
+  });
+  return [committees, committeeScores];
+}
+

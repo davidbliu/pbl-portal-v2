@@ -47,42 +47,27 @@ app.controller('CalendarController', function($scope, $http, MemberService, Poin
 
 
   $scope.recordAttendance = function($event, email){
-    type = 'chair';
-    q = new Parse.Query(EventMember);
+    q = new Parse.Query(Attendance);
     q.equalTo('member_email', email);
-    q.equalTo('event_id', $scope.event.event_id);
-    q.find({success:function(data){
-      ems = data
-      if(ems.length == 0){
-        em = new EventMember();
-      }
-      else{
-        em = ems[0];
-        // destroy excess event members
-        for(var i=1;i<ems.length;i++){
-          em.destroy();
-        }
-        //flip flop type
-        type = em.get('type');
-        if(type == 'chair'){
-          type = 'none';
+    q.find({
+      success:function(data){
+        a = data[0];
+        console.log(a.get('event_ids'));
+        $($event.target).removeClass('chair');
+        eids = a.get('event_ids');
+        index = eids.indexOf($scope.event.event_id);
+        if(index ==-1){
+          eids.push($scope.event.event_id); 
+          $($event.target).addClass('chair');
         }
         else{
-          type = 'chair'
+          eids.splice(index, 1);
         }
+        a.set('event_ids', eids);
+        a.save();
+        
       }
-      em.set('member_email', email);
-      em.set('event_id', $scope.event.event_id);
-      em.set('type', type);
-      em.save(null, {
-        success:function(data){
-          console.log('saved');
-          $($event.target).removeClass('chair');
-          $($event.target).removeClass('cm');
-          $($event.target).addClass(type);
-        }
-      });
-    }});
+    });
   }; 
 
   //calendar config

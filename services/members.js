@@ -48,18 +48,6 @@ app.service("MemberService",  function($http, $rootScope) {
       });
     }
 
-    //serviceInstance.memberHash = function(callback){
-      //query = new Parse.Query(Member);
-      //query.limit(MAXINT);
-      //query.exists('email');
-      //query.find({
-        //success: function(results){
-          //hash= getMemberHash(convertMembers(results));
-          //callback(hash);
-        //}
-      //});
-    //}
-    
    serviceInstance.getMemberHash = function(members){
      h = {};
      for (var i=0;i<members.length;i++){
@@ -95,6 +83,7 @@ function convertMember(parseMember){
   m['committee'] = parseMember.get('committee');
   return m;
 }
+
 function convertMembers(parseMembers){
   members = [];
   for (var i=0;i<parseMembers.length;i++){

@@ -1,15 +1,4 @@
-
-
-app.service("PointsService",  function($http) {
-    var serviceInstance = {};
-
-    serviceInstance.points = function(myEmail, callback){
-      Parse.Cloud.run("points", {email: myEmail}, 
-                      {success:function(data){
-                       console.log(data);
-                      }}); 
-    };
-    serviceInstance.events = function(callback){
+function events(callback){
       query = new Parse.Query(Event);
       query.limit(10000);
       query.descending('start_time');
@@ -19,14 +8,67 @@ app.service("PointsService",  function($http) {
           callback(events);
         }
       });
+}
+function eventHash(events){
+  return _.object(_.map(events, function(x){
+    return [x.google_id, x];
+  }));
+}
+function attendance(callback){ 
+  q = new Parse.Query(Attendance);
+  q.limit(1000);
+  q.find({
+    success:function(data){
+      callback(convertAttendances(data));
+    }
+  });
+}
+
+app.service("PointsService",  function($http) {
+    var serviceInstance = {};
+
+    serviceInstance.points = function(myEmail, callback){
+      events(function(data){
+        eHash = eventHash(data);
+        aquery = new Parse.Query(Attendance);
+        aquery.equalTo('member_email', myEmail);
+        aquery.find({
+          success: function(data){
+            r = {};
+            a = convertAttendance(data[0]);
+            events = _.map(a.event_ids, function(x){
+              return eHash[x];
+            });
+            points = _.map(events, function(x){
+              return x.points || 0;
+            });
+            points = _.reduce(points, function(memo, num){
+              return memo+num;
+            }, 0);
+            callback({'points': points, 'attendance': events});
+          }
+        });
+      });
     };
-    serviceInstance.getEventHash = function(events){
-     h = {};
-     for(var i=0;i<events.length;i++){
-       h[events[i].event_id] = events[i];
-     }
-     return h;
-    };  
+    serviceInstance.memberAttendance = function(email, callback){
+      q = new Parse.Query(Attendance);
+      q.equalTo('member_email', email);
+      q.find({
+        success:function(data){
+          callback(convertAttendances(data));
+        }
+      });
+    };
+    serviceInstance.events = function(callback){
+      events(callback);
+    };
+    serviceInstance.getEventHash= function(events){
+      return eventHash(events);
+    };
+    
+    serviceInstance.attendance = function(callback){
+      attendance(callback);
+    };
 
     serviceInstance.eventAttendance = function(event_id, callback){
       q = new Parse.Query(Attendance);
@@ -36,53 +78,7 @@ app.service("PointsService",  function($http) {
       }});
     };
 
-    serviceInstance.runHello = function(){
-      Parse.Cloud.run('hello', null, {success:function(data){
-        console.log('success');
-          console.log(data);
-      }});
-    };
 
-    serviceInstance.points = function(email, callback){
-      Parse.Cloud.run("points", {email:email}, 
-                      {
-                        success:function(data){
-                          callback(data);
-                        }
-                      });
-    };
-    //serviceInstance.parseMemberPoints = function(email, callback){
-      //emQuery = new Parse.Query(EventMember); 
-      //emQuery.equalTo('member_email', email);
-      //emQuery.find({
-        //success:function(data){
-          //eids = [];
-          //for(var i=0;i<data.length;i++){
-            //eids.push(data[i].get('event_id'));
-          //}
-          //eQuery = new Parse.Query(Event);
-          //eQuery.containedIn('google_id', eids);
-          //eQuery.find({
-            //success:function(results){
-              //points = 0;
-              //attendance = [];
-              //for (var i=0;i<results.length;i++){
-                //pts = results[i].get('points') || 0;
-                //points = points + pts;
-                //event = {};
-                //event.name = results[i].get('name');
-                //event.points = results[i].get('points');
-                //attendance.push(event);
-              //}
-              //r = {};
-              //r.attendance = attendance;
-              //r.points = points;
-              //callback(r);
-            //}
-          //});
-        //}
-      //});
-    //};
     return serviceInstance;
 });
 function convertAttendance(pa){
