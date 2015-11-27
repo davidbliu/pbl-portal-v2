@@ -1,10 +1,17 @@
 
-app.controller('BlogController', function($scope, $http, BlogService, UtilService) {
+app.controller('BlogController', function($scope, $http, MemberService, BlogService, UtilService) {
+  //myEmail = $('#uname').text();
+  myEmail = 'davidbliu@gmail.com';
+  //myEmail = 'jhjp0823@berkeley.edu';
+  
   $scope.tags = BlogService.tags;
-  BlogService.allPosts(function(data){
-    $scope.posts = data;
-    $scope.unfilteredPosts = data;
-    $scope.$digest();
+  MemberService.me(myEmail, function(meData){
+    $scope.me = meData;
+    BlogService.allPosts($scope.me, function(data){
+      $scope.posts = data;
+      $scope.unfilteredPosts = data;
+      $scope.$digest();
+    });
   });
 
   $scope.filterPost = function(post){

@@ -12,56 +12,57 @@ function convertPosts(posts){
     p.timestamp = posts[i].get('timestamp');
     p.objectId = posts[i].id;
     p.tags = posts[i].get('tags');
+    p.last_editor = posts[i].get('last_editor');
     r.push(p);
   }
   return r;
 }
+
+function canViewPost(me, post){
+  if (post.view_permissions == 'Anyone' || post.view_permissions == 'Only PBL' || post.author == me.email || post.last_editor == me.email){
+      return true;
+  }
+  if (post.view_permissions == 'Only Officers'){
+    if(me.position == 'chair' || me.position == 'exec'){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  if(post.view_permissions == 'Only Me'){
+    return false;
+  }
+  return true;
+}
+
+function canEditPost(me, post){
+  return true;
+}
+
 app.service("BlogService",  function($http) {
     var serviceInstance = {};
 
     serviceInstance.tags = ['Pin', 'Announcements', 'Other', 'Reminders', 'Events', 'Email','Tech', 'CO', 'CS', 'FI', 'HT', 'MK', 'IN', 'PB', 'SO', 'WD', 'EX', 'OF'];
-
     serviceInstance.permissionsList = ['Only Me', 'Only Execs', 'Only Officers', 'Only PBL', 'Anyone'];
 
-    serviceInstance.allPosts = function(callback){
+    //TODO: only get posts that this user can view
+    serviceInstance.allPosts = function(me, callback){
+      console.log('i am ');
+      console.log(me);
       query = new Parse.Query(Blog);
       query.descending('createdAt');
       query.find({
         success: function(data){
-          callback(convertPosts(data));
+          posts = convertPosts(data);
+          posts = _.filter(posts, function(post){
+            return canViewPost(me, post);
+          });
+          callback(posts);
         }
       });
     };
 
-
-    serviceInstance.savePost = function(post, callback){
-     $http.post(tokenizedURL(ROOT_URL+'/save_blogpost'), post)
-       .success(function(data){
-         callback(data);
-       });
-    };
-
-    serviceInstance.saveBlogpost = function(title, content, tags, permissions, callback){
-      $http.post(tokenizedURL(ROOT_URL+'/create_blogpost'), params)
-        .success(function(data){
-          console.log(data);
-          callback(data);
-        });
-    };
-
-    serviceInstance.getPost = function(id, callback){
-      $http.get(tokenizedURL(ROOT_URL+'/get_blogpost?id='+id))
-        .success(function(data){
-          callback(data);
-        });
-    }
     
-
-    serviceInstance.deletePost= function(id, callback){
-      $http.get(tokenizedURL(ROOT_URL+'/delete_blogpost?id='+id))
-        .success(function(data){
-          callback(data);
-        });
-    }
     return serviceInstance;
 });

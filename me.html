@@ -1,14 +1,18 @@
 <link rel = 'import' href = '/htmlets/header.html'>
+<script src = 'controllers/me.js'></script>
+
 <body ng-app = 'pblApp'>
-<button class = 'btn btn-material-blue-500' id = 'linout' onlick = "toggleLogin()">Login</button>
-<div ng-controller = 'AuthController'>
+<div ng-controller = 'MeController'>
+  <div ng-show = 'me == null'>
+    Trouble linking you wiki and portal accounts, please contact administrators
+  </div>
   <div ng-show = 'me != null'>
-    <div>You are logged in as:</div>
-    <ul>
-      <li>name: <a href = './{{me.name}}'>{{me.name}}</a></li>
-      <li>email: {{me.email}}</li>
-      <li>position: {{me.position}}</li>
-    </ul>
+    <div>If any of this information is incorrect, contact administrators</div>
+    <div>Name: {{me.name}}</div>
+    <div>Position: {{me.position}}</div>
+    <div>Committee: {{me.committee}}</div>
+    <div>Email: {{me.email}}</div>
+    <div>Phone: {{me.phone}}</div>
   </div>
 </div>
 </body>
