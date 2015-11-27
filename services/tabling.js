@@ -1,32 +1,24 @@
-
+function convertTablingSlot(pts){
+  ts = {};
+  ts.member_emails = pts.get('member_emails');
+  ts.time = pts.get('time');
+  ts.objectId = pts.id;
+  return ts;
+}
+function convertTablingSlots(pts){
+  return _.map(pts, function(x){
+    return convertTablingSlot(x);
+  });
+}
 
 app.service("TablingService",  function($http, $rootScope) {
     var serviceInstance = {};
-    serviceInstance.parseTablingSlots = function(callback){
+    serviceInstance.tablingSlots = function(callback){
       query = new Parse.Query(TablingSlot);
       query.find({
         success: function(results){
-          tablingSlots = [];
-          for(var i=0;i<results.length;i++){
-            tablingSlots.push({'member_emails': results[i].get('member_emails'),
-                              'time': results[i].get('time'), 'objectId': results[i].id});
-          }
-          console.log(tablingSlots);
-          console.log('that was tabling slots');
-          callback(tablingSlots);
+          callback(convertTablingSlots(results));
         }});
-    };
-
-    serviceInstance.tablingSlots = function(callback){
-        if($rootScope.tablingSlots != null){
-          callback($rootScope.tablingSlots);
-          return;
-        }
-        $http.get(tokenizedURL(ROOT_URL+'/tabling_slots'))
-            .success(function(data){
-              $rootScope.tablingSlots = data;
-                callback(data);
-            });
     };
 
     serviceInstance.tablingHash = function(slots){
@@ -41,17 +33,9 @@ app.service("TablingService",  function($http, $rootScope) {
         }
         h[day].push(slot);
       }
-      console.log('tabling hash was ');
-      console.log(h);
       return h;
     };
 
-    serviceInstance.schedule = function(callback){
-      $http.get(tokenizedURL(ROOT_URL+'/schedule'))
-        .success(function(data){
-          callback(data);
-        });
-    };
     serviceInstance.timeString = function(time){
         return timeToString(time);
     }

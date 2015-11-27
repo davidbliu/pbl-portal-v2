@@ -1,8 +1,57 @@
-<link rel = 'import' href= '/htmlets/header.html'>
+<style type = 'text/css'>
+.post-content{
+  margin-left:50px;
+}
+.label-primary{
+  margin:2px;
+}
+.post-metadata{
+    padding:5px;
+    margin:5px;
+}
+.label-primary.selected-tag{
+  background-color:black !important;
+  color:white !important;
+}
+</style>
+
+<link rel = 'import' href = '/htmlets/header.html'>
+
 <body ng-app = 'pblApp'>
 <div ng-controller = 'BlogController'>
-  <div ng-repeat = 'post in posts'>
-    <a href = './blogpost?id={{post.objectId}}'>{{post.title}}</a>
+
+  <div ng-show = 'posts != null'>
+    <div class = 'col-md-4'>
+
+
+      <input type = 'text' class = 'form-control' ng-model = 'searchTerm' placeholder = 'Search Blogposts'>
+
+      <div ng-repeat = 'post in posts | filter:searchTerm'>
+        <a href = 'javascript:void(0);' ng-click = 'filterPost(post)'>{{post.title}}</a>
+      </div>
+    </div>
+    <!--end of col md 4-->
+
+    <div class = 'col-md-8'>
+      <div ng-repeat = 'tag in tags' ng-click = 'filterTags(tag)' class = 'tag label label-primary'>{{tag}}</div>
+
+      <div ng-repeat = 'post in posts | filter:searchTerm'>
+        <h2 id = '{{post.id}}'>{{post.title}}</h2>
+
+        <div class = 'post-metadata'>
+          <div ng-repeat = 'tag in post.tags' class = 'label label-primary'>{{tag}}</div>
+          <div>Author: {{post.author}}</div>
+          <div>Timestamp: {{post.timestamp}} </div>
+          <div><a href = './editPost?id={{post.objectId}}'>Edit Post</a></div>
+          <div><a href = './emailPost?id={{post.objectId}}'>Email Post</a></div>
+          <div><a href ='javascript:void(0);' ng-click = 'pinPost(post)'>Pin Post</a></div>
+          <div><a href = './viewPost?id={{post.objectId}}'>Link to This Post</a></div>
+        </div>
+
+        <div class = 'post-content' ng-bind-html = 'post.content | to_trusted'></div>
+
+      </div>
+    </div>
   </div>
 </div>
 </body>

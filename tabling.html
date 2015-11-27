@@ -24,10 +24,6 @@
 </style>
 <body ng-app = 'pblApp'>
   <div ng-controller = 'TablingController'>
-       <div ng-show = 'memberHash == null || tablingHash == null'>
-          <img src = '{{loadingGif}}' class = 'loading-gif'>
-        </div>
- 
         <div id = 'tablingSchedule' ng-show='memberHash != null && tablingHash != null'>
           <div ng-repeat = 'day in tablingDays' class = 'tabling-day'>
             <div ng-repeat = 'slot in tablingHash[day]' class = 'tabling-slot'>
