@@ -1,3 +1,7 @@
+<?php
+require_once('../header.php');
+?>
+
 <style type = 'text/css'>
 .post-content{
   margin-left:50px;
@@ -22,12 +26,21 @@
   padding:10px;
   float:left;
 }
+.content{
+margin-left:25px !important;
+margin-right:25px !important;
+}
+#main-header{
+  text-align:center;
+  margin-bottom:15px;
+}
+
 </style>
 
 <link rel = 'import' href = '/htmlets/header.html'>
-
 <body ng-app = 'pblApp'>
-<div ng-controller = 'BlogController'>
+<div  class = 'content' ng-controller = 'BlogController'>
+  <h1 class = 'main-header' >Berkeley PBL Blog</h1>
 
   <div ng-show = 'posts != null'>
     <div class = 'col-md-4'>

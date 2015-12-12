@@ -1,0 +1,29 @@
+<link rel = 'import' href = './header.html'>
+<body ng-app = 'pblApp'>
+<div ng-controller = 'SearchController'>
+<h1>Did you mean?</h1>
+  <div ng-repeat = 'golink in golinks'>
+    <a href = '{{golink.get("url")}}'>{{golink.get("key")}}</a>
+  </div>
+</div>
+</body>
+
+<script>
+function getTokens(searchTerm){
+  return [searchTerm];
+}
+
+app.controller('SearchController', function($scope, $http, UtilService) {
+  q = new Parse.Query(Golink);
+  UtilService.getParameterByName('q', function(searchTerm){
+    searchTokens = getTokens(searchTerm);
+    q.containedIn('tokens', searchTokens);
+    q.find({
+      success:function(data){
+        $scope.golinks = data;
+        $scope.$digest();
+      }
+    });
+  });
+});
+</script>

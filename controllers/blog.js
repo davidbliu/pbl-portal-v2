@@ -4,9 +4,19 @@ app.controller('BlogController', function($scope, $http, MemberService, BlogServ
   myEmail = 'davidbliu@gmail.com';
   //myEmail = 'jhjp0823@berkeley.edu';
   
+
+  //get post id from url parameter
+  UtilService.getParameterByName("id", function(data){
+    href = window.location.href.toString();
+    if(href.indexOf('id') != -1 || data == null || data == ''){
+      $scope.searchTerm = data;
+    }
+  });
+
   $scope.tags = BlogService.tags;
   MemberService.me(myEmail, function(meData){
     $scope.me = meData;
+    console.log($scope.me);
     BlogService.allPosts($scope.me, function(data){
       $scope.posts = data;
       $scope.unfilteredPosts = data;

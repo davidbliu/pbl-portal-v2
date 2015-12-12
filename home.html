@@ -1,0 +1,86 @@
+<style type = 'text/css'>
+.optimg{
+  height:150px;
+  width:200px;
+}
+ul.img-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+ul.img-list li {
+  display: inline-block;
+  height: 200px;
+  margin: 0 1em 1em 0;
+  position: relative;
+  width: 200px;
+}
+span.text-content {
+  background: rgba(0,0,0,0.5);
+  color: white;
+  cursor: pointer;
+  display: table;
+  height: 150px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 200px;
+}
+
+span.text-content span {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+span.text-content {
+  background: rgba(0,0,0,0.5);
+  color: white;
+  cursor: pointer;
+  display: table;
+  height: 150px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 200px;
+  opacity: 0;
+}
+
+ul.img-list li:hover span.text-content {
+  opacity: 1;
+}
+</style>
+<link rel = 'import' href = '/htmlets/header.html'>
+<div class = 'row'>
+  <div class = 'col-md-4'>
+    <h2>Upcoming Events</h2>
+    <iframe src="https://calendar.google.com/calendar/embed?mode=AGENDA&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=8bo2rpf4joem2kq9q2n940p1ss%40group.calendar.google.com&amp;color=%23B1365F&amp;ctz=America%2FLos_Angeles" style="border-width:0" width="300" height="450" frameborder="0" scrolling="no"></iframe>
+  </div>
+
+  <div class = 'col-md-8'>
+    <!--<h2>Members Portal</h2>-->
+    <!--<p>Welcome to the new Members Portal. This is PBL's central hub: come here for any information! We're hosted on MediaWiki because the portal is not just tools to help you track tabling, points, and blogposts. It's here to hold any knowledge in PBL. The portal is an encylopedia of information both new and old. Our goal is to help you find the resources you need and leave your legacy.</p>-->
+    <ul class = 'img-list'>
+      <li class = 'card'>
+        <a href = './members'>
+          <img class = 'optimg' src = 'https://scontent-dfw1-1.xx.fbcdn.net/hphotos-xfa1/t31.0-8/11200948_10152892220691491_6191092919885336259_o.jpg' />
+          <span class = 'text-content'><span>Members</span></span>
+        </a>
+      </li>
+      <li class = 'card'>
+        <a href = './points_rankings'>
+          <img class = 'optimg' src = 'https://scontent-dfw1-1.xx.fbcdn.net/hphotos-xtf1/v/t1.0-9/12009625_10152976948217827_2275687839304127471_n.jpg?oh=432fedf0cccea52ca8c78722eef29f62&oe=56F5413F' />
+          <span class = 'text-content'><span>Points</span></span>
+        </a>
+      </li>
+      <li class = 'card'>
+        <a href = './committee_reviews'>
+          <img class ='optimg' src = 'https://scontent-dfw1-1.xx.fbcdn.net/hphotos-xpa1/t31.0-8/12184136_10153298351291491_1236391992433436120_o.jpg' />
+          <span class = 'text-content'><span>Committee Reviews</span></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+

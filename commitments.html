@@ -1,0 +1,28 @@
+<style type = 'text/css'>
+.day{
+  float:left;
+  width:15%;
+  margin:5px;
+}
+</style>
+<link rel = 'import' href = '/htmlets/header.html'>
+<script src = '/htmlets/controllers/commitments.js'></script>
+<body ng-app = 'pblApp'>
+<div ng-controller = 'CommitmentsController'>
+
+<p>Mark times that are you available and leave times you are unavailable unmarked</p>
+<div>
+  <button class = 'btn btn-material-blue-500' ng-click = 'saveAll()'>Save All</button>
+  <button class = 'btn btn-material-blue-500' ng-click = 'markAll()'>Mark All</button>
+  <button class = 'btn btn-material-red-500' ng-click = 'clearAll()'>Clear All</button>
+</div>
+
+<div ng-repeat = 'day in days' class = 'day'>
+  <div ng-repeat = 'time in timeHash[day]'>
+    <i ng-click = 'toggleTime(time)' ng-class = '{true: "mdi-toggle-check-box", false: "mdi-toggle-check-box-outline-blank"}[schedule.indexOf(time) != -1]' ></i>
+    <span>{{timeString(time)}}</span>
+  </div>
+</div>
+
+</div>
+</div>

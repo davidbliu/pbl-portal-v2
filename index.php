@@ -1,7 +1,10 @@
+<?php
+require_once('../header.php');
+?>
+
+<head>
 
 <script src = '/htmlets/lib/jquery.min.js'></script>
-
-
 <script src = '/htmlets/lib/underscore-min.js'></script>
 <!--angular-->
 <script src = '/htmlets/lib/angular.min.js'></script>
@@ -58,3 +61,7 @@
 <script type="text/javascript" src="/htmlets/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 <script type="text/javascript" src="/htmlets/bower_components/fullcalendar/dist/gcal.js"></script>
 
+</head>
+<body ng-app = 'pblApp'>
+<div ng-view></div>
+</body>

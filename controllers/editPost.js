@@ -1,33 +1,54 @@
 
-app.controller('EditPostController', function($scope, $http, BlogService, UtilService) {
+app.controller('EditPostController', function($scope, $http, BlogService, MemberService, UtilService) {
   $scope.editing = false;
   $scope.title = 'Create Blogpost';
   $scope.message = 'edit post';
   $scope.tags = BlogService.tags;
   $scope.permissionsList = BlogService.permissionsList;
-
+  $scope.myEmail = $('#uname').text();
+  
   //get post id from url parameter
   UtilService.getParameterByName("id", function(data){
     href = window.location.href.toString();
-    if(href.indexOf('createPost') != -1 || data == null || data == ''){
-      console.log('there is not post');
+    if(href.indexOf('create') != -1 || data == null || data == ''){
       post = {};
       post.title = '';
       post.tags = [];
       post.content = '';
-      post.permissions = 'Anyone';
+      post.view_permissions = 'Only Me';
+      post.edit_permissions = 'Only Me';
+      post.author = $scope.myEmail;
+      post.last_editor = $scope.myEmail;
       $scope.post = post;
+
     }
     else{
       // pull the blogpost from api server
       $scope.title = 'Edit Blogpost';
-      BlogService.getPost(data, function(post){
-        $scope.post = post;
-        //set tinymce content
-        tinyMCE.activeEditor.setContent(post.content, {format: 'raw'});
-        // color tags
-        colorTags(post.tags);
-        $scope.editing = true;
+      MemberService.me($scope.myEmail, function(meData){
+        $scope.me = meData;
+        BlogService.getPost(data, function(post){
+          //TODO: check for editing permissions first
+          if(BlogService.canEditPost($scope.me, post)){
+            console.log(post);
+            console.log('hi there blog');
+            $scope.post = post;
+            tinyMCE.activeEditor.setContent(post.content, {format: 'raw'});
+            colorTags(post.tags);
+            $scope.editing = true;
+            $scope.$digest();
+          }
+          else{
+            console.log('no permissions');
+            $scope.title = 'You dont have editing permissions to that post';
+            post = {};
+            post.title = 'No Permissions';
+            post.author = $scope.myEmail;
+            post.last_editor = $scope.myEmail;
+            $scope.post = post;
+            $scope.$digest();
+          }
+        });
       });
     }
   });
@@ -39,7 +60,7 @@ app.controller('EditPostController', function($scope, $http, BlogService, UtilSe
       tags.push(tag);
     }
     else{
-      tags.remove(indexOf);
+      tags = _.filter(tags, function(x){return x != tag});
     }
     $scope.post.tags = tags;
     colorTags($scope.post.tags);
@@ -47,35 +68,34 @@ app.controller('EditPostController', function($scope, $http, BlogService, UtilSe
 
   $scope.deletePost = function(){
     post_id = $scope.post.objectId;
-    console.log('deleting post '+post_id);
     BlogService.deletePost(post_id, function(data){
-      console.log(data);
-      console.log('post deleted');
-      window.location.href = '/#/blog';
+      window.location.href = './blog';
     });
   };
 
-  function savePost(){
+  $scope.savePost = function(){
     console.log('saving post');
     post = $scope.post;
     post.content = tinyMCE.activeEditor.getContent();
+    post.last_editor = $scope.myEmail;
+    console.log(post);
     BlogService.savePost(post, function(data){
       console.log('post successfully saved');
       console.log(data);
     });
-    window.location.href = '/#/blog';
+    window.location.href = './blog';
   };
 
   $('#save-btn').click(function(){
     savePost();
   });
 
+
   function colorTags(tags){
     $('.post-tag').each(function(){
       id = $(this).attr("id").split('-')[0];
-      console.log(id);
       if(tags.indexOf($(this).attr('id').split('-')[0]) != -1 ){
-        $(this).addClass('selected');
+        $(this).addClass('selected-tag');
       }
     });
   };

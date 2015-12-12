@@ -26,7 +26,7 @@
   <div ng-controller = 'TablingController'>
         <div id = 'tablingSchedule' ng-show='memberHash != null && tablingHash != null'>
           <div ng-repeat = 'day in tablingDays' class = 'tabling-day'>
-            <div ng-repeat = 'slot in tablingHash[day]' class = 'tabling-slot'>
+            <div ng-repeat = 'slot in tablingHash[day] | orderBy:"time"' class = 'tabling-slot'>
               <div class = 'label label-blue'>{{timeString(slot.time)}}</div>
               <div ng-repeat = 'email in slot.member_emails.split(",")'>{{memberHash[email].name}}
               </div>

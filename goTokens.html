@@ -1,0 +1,26 @@
+<link rel = 'import' href = './header.html'>
+<h1>creating tokens</h1>
+<script>
+ParseGoLink = Parse.Object.extend('ParseGoLink');
+q = new Parse.Query(ParseGoLink);
+q.doesNotExist('tokens');
+q.notEqualTo('member_email', 'berkeleypbl.machine@gmail.com');
+q.limit(1000);
+q.descending('createdAt');
+separator = /[\s-]+/;
+q.find({
+  success:function(data){
+    console.log('pulled '+data.length+'golinks');
+    _.each(data, function(x){
+      key = x.get('key');
+      if(key != ''){
+        tokens = key.split(separator);
+        x.set('tokens', tokens);
+        x.save();
+        console.log(tokens);
+      }
+    });
+  }
+});
+
+</script>

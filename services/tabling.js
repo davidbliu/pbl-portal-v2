@@ -36,6 +36,16 @@ app.service("TablingService",  function($http, $rootScope) {
       return h;
     };
 
+    serviceInstance.schedule = function(email, callback){
+      console.log('getting schedule for '+email);
+      q = new Parse.Query(Commitments);
+      q.equalTo('member_email', email);
+      q.find({
+        success:function(data){
+          callback(data[0].get('commitments'));
+        }
+      });
+    };
     serviceInstance.timeString = function(time){
         return timeToString(time);
     }

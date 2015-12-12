@@ -10,10 +10,9 @@ app.service("GoService",  function($http) {
           callback(data);
         }
       });
-        //$http.get(tokenizedURL(ROOT_URL+'/recent_golinks'))
-            //.success(function(data){
-                //callback(data);
-            //});
+    };
+    
+    serviceInstance.search = function(searchTerm, callback){
     };
 
     serviceInstance.convertResults = function(results){
@@ -28,7 +27,7 @@ app.service("GoService",  function($http) {
       }
       return rs;
     }
-
+// the old api server stuff TODO remove
     serviceInstance.myLinks = function(callback){
         $http.get(tokenizedURL(ROOT_URL+'/my_links'))
             .success(function(data){
