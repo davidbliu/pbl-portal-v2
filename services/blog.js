@@ -1,23 +1,13 @@
-function convertPost(pp){
-  p = {};
-  p.title = pp.get('title');
-  p.content = pp.get('content');
-  p.view_permissions = pp.get('view_permissions');
-  p.edit_permissions = pp.get('edit_permissions');
-  p.createdAt = pp.get('createdAt');
-  p.author = pp.get('author');
-  p.timestamp = pp.get('timestamp');
-  p.objectId = pp.id;
-  p.tags = pp.get('tags');
-  p.last_editor = pp.get('last_editor');
-  return p;
+
+var postFields = ['title', 'content', 'view_permissions', 'edit_permissions', 'createdAt', 'author', 'timestamp', 'tags', 'last_editor', 'parent', 'folder', 'img'];
+function convertPost(p){
+  return convertParse(p, postFields);
 }
 function convertPosts(posts){
-  r = [];
-  for(var i=0;i<posts.length;i++){
-    r.push(convertPost(posts[i]));
-  }
-  return r;
+  return convertParseObjects(posts, postFields);
+}
+function convertComments(comments){
+  return convertParseObjects(comments, postFields);
 }
 
 function saveNewPost(postData, callback){
@@ -93,6 +83,7 @@ app.service("BlogService",  function($http) {
     };
 
     serviceInstance.tags = ['Pin', 'Announcements', 'Other', 'Reminders', 'Events', 'Email','Tech', 'CO', 'CS', 'FI', 'HT', 'MK', 'IN', 'PB', 'SO', 'WD', 'EX', 'OF'];
+    serviceInstance.folders = ['Pin', 'Announcements', 'Other', 'Reminders', 'Events', 'Email','Tech'];
     serviceInstance.permissionsList = ['Only Me', 'Only Execs', 'Only Officers', 'Only PBL', 'Anyone'];
 
     //TODO: only get posts that this user can view
@@ -110,6 +101,21 @@ app.service("BlogService",  function($http) {
       });
     };
 
+    serviceInstance.folderPosts = function(me,folder, callback){
+      query = new Parse.Query(Blog);
+      query.descending('createdAt');
+      query.equalTo('folder', folder);
+      query.find({
+        success: function(data){
+          posts = convertPosts(data);
+          posts = _.filter(posts, function(post){
+            return canViewPost(me, post);
+          });
+          callback(posts);
+        }
+      });
+    };
+    
     serviceInstance.getPost = function(postId, callback){
       q = new Parse.Query(Blog);
       q.get(postId, {
@@ -140,6 +146,15 @@ app.service("BlogService",  function($http) {
         }
       });
     };
-
+    
+    serviceInstance.getComments = function(id, callback){
+      q = new Parse.Query(BlogPost);
+      q.equalTo('parent', id);
+      q.find({
+        success:function(pComments){
+          callback(convertComments(pComments));
+        }
+      });
+    };
     return serviceInstance;
 });

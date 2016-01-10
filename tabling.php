@@ -1,0 +1,43 @@
+<?php
+require_once('../pblPhp/header.php');
+?>
+
+<link rel = 'import' href = '/htmlets/header.html'>
+<style>
+#tabling-schedule{
+  margin-top:25px !important;
+    clear:both;
+      display:block;
+}
+.tabling-day{
+  margin:5px;
+  float:left;
+  width:15%;
+}
+.tabling-slot{
+  margin: 5px;
+}
+.label-blue{
+  background-color:#337ab7;
+  color:white;
+  padding:2px;
+  text-align:center;
+  font-size:10px;
+  border-radius:3px;
+}
+</style>
+
+<body ng-app = 'pblApp'>
+  <div ng-controller = 'TablingController'>
+    <h1>Tabling Schedule</h1>
+        <div id = 'tablingSchedule' ng-show='memberHash != null && tablingHash != null'>
+          <div ng-repeat = 'day in tablingDays' class = 'tabling-day'>
+            <div ng-repeat = 'slot in tablingHash[day] | orderBy:"time"' class = 'tabling-slot'>
+              <div class = 'label label-blue'>{{timeString(slot.time)}}</div>
+              <div ng-repeat = 'email in slot.member_emails.split(",")'>{{memberHash[email].name}}
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+</body>

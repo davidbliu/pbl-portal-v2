@@ -5,7 +5,7 @@ app.controller('EditPostController', function($scope, $http, BlogService, Member
   $scope.message = 'edit post';
   $scope.tags = BlogService.tags;
   $scope.permissionsList = BlogService.permissionsList;
-  $scope.myEmail = $('#uname').text();
+  $scope.myEmail = myEmail;
   
   //get post id from url parameter
   UtilService.getParameterByName("id", function(data){
@@ -69,7 +69,7 @@ app.controller('EditPostController', function($scope, $http, BlogService, Member
   $scope.deletePost = function(){
     post_id = $scope.post.objectId;
     BlogService.deletePost(post_id, function(data){
-      window.location.href = './blog';
+      window.location.href = '/htmlets/blog.php';
     });
   };
 
@@ -83,7 +83,7 @@ app.controller('EditPostController', function($scope, $http, BlogService, Member
       console.log('post successfully saved');
       console.log(data);
     });
-    window.location.href = './blog';
+    //window.location.href = '/htmlets/blog.php';
   };
 
   $('#save-btn').click(function(){

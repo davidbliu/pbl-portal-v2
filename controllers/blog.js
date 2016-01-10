@@ -1,7 +1,7 @@
 
 app.controller('BlogController', function($scope, $http, MemberService, BlogService, UtilService) {
   //myEmail = $('#uname').text();
-  myEmail = 'davidbliu@gmail.com';
+  //myEmail = 'davidbliu@gmail.com';
   //myEmail = 'jhjp0823@berkeley.edu';
   
 
@@ -12,13 +12,19 @@ app.controller('BlogController', function($scope, $http, MemberService, BlogServ
       $scope.searchTerm = data;
     }
   });
+  $scope.toggleMeta = function(id){
+    $('#'+id+'-meta').css('display', 'block');
+  };
 
+  //pull in posts
   $scope.tags = BlogService.tags;
   MemberService.me(myEmail, function(meData){
     $scope.me = meData;
-    console.log($scope.me);
     BlogService.allPosts($scope.me, function(data){
       $scope.posts = data;
+      $scope.pinned = _.filter(posts, function(x){
+        return _.contains(x.tags, 'Pin');
+      });
       $scope.unfilteredPosts = data;
       $scope.$digest();
     });

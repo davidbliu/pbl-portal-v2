@@ -1,4 +1,19 @@
-
+function convertGolinks(golinks){
+  gs = _.map(golinks, function(x){
+    return convertGolink(x);
+  });
+  return gs;
+}
+function convertGolink(pg){
+  fields = ['member_email', 'key', 'url', 'directory', 'description', 'tags', 'createdAt', 'updatedAt', 'num_clicks'];
+  g = {};
+  _.each(fields, function(f){
+    g[f] = pg.get(f);
+  });
+  g.objectId = pg.id;
+  console.log(g);
+  return g;
+}
 app.service("GoService",  function($http) {
     var serviceInstance = {};
 

@@ -1,0 +1,24 @@
+var page = 0;
+app.controller('FolderCtrl', function($scope, BlogService){
+  //folderId is set (see folder.php)
+  $scope.folder = folderId;
+  $scope.message = 'hi';
+  function getPosts(page){
+    q = new Parse.Query(BlogPost);
+    q.equalTo('folder', $scope.folder);
+    q.limit(10);
+    q.skip(page * 10);
+    q.find({
+      success:function(posts){
+        $scope.posts = convertPosts(posts);
+        $scope.$digest();
+      }
+    });
+  }
+  getPosts(page);
+  $scope.nextPage = function(){
+    page += 1
+  $scope.createPost = function(){
+    alert('not implemented');
+  };
+});
