@@ -1,0 +1,7 @@
+<h1>[PBL] Links</h1>
+<ul class = 'list-group'>
+  <li ng-repeat = 'golink in golinks' class = 'list-group-item'>
+  <img src = '{{golink.image.url()}}' class = 'golink-img'>
+  <a href = '{{golink.url}}' target = '_blank'>{{golink.key}}</a>
+  </li>
+</ul>

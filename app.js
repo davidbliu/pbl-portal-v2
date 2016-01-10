@@ -1,12 +1,22 @@
 var ROOT_URL = 'http://wd.berkeley-pbl.com:3000'
 
-var app = angular.module('pblApp',['ui.calendar']);
+var app = angular.module('pblApp',['ngRoute', 'ui.calendar']);
 app.filter('to_trusted', ['$sce', function($sce){
     return function(text) {
         return $sce.trustAsHtml(text);
     };
 }]);
-
+app.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/', {
+        templateUrl: 'views/home.html',
+        controller: 'HomeCtrl'
+      }).
+      otherwise({
+        redirectTo: '/'
+      });
+  }]);
 var authEmail = 'davidbliu@gmail.com';
 function tokenizeEmail(email){
   var result = '';

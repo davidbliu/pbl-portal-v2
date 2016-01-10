@@ -10,6 +10,8 @@ var TablingSlot = Parse.Object.extend("ParseTablingSlot");
 var Attendance = Parse.Object.extend("Attendance");
 var Commitments = Parse.Object.extend("Commitments");
 
+var ParseGoLinkFields = ['createdAt', 'key', 'url', 'image', 'description', 'member_email'];
+
 function convertParse(parseObject, fields){
   res = {};
   _.each(fields, function(field){
