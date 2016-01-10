@@ -1,0 +1,27 @@
+body{
+  margin-left:25px;
+  margin-right:25px;
+}
+a{
+  color:#009bff !important;
+}
+.golink-img{
+  height:100px;
+  right:0px;
+}
+.block{
+  display:block;
+  clear:both;
+}
+.list-group-item{
+  overflow:auto;
+}
+.jumbotron-blue{
+  background-color:#4485F4;
+  color:white;
+  text-align:center;
+}
+#golinks-container{
+  /*margin-left:25%;*/
+  /*width:50%;*/
+}

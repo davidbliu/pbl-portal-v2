@@ -1,7 +1,19 @@
-<h1>[PBL] Links</h1>
-<ul class = 'list-group'>
-  <li ng-repeat = 'golink in golinks' class = 'list-group-item'>
-  <img src = '{{golink.image.url()}}' class = 'golink-img'>
-  <a href = '{{golink.url}}' target = '_blank'>{{golink.key}}</a>
-  </li>
-</ul>
+<div class = 'jumbotron jumbotron-blue'>
+  <h3>[PBL] Links</h3>
+</div>
+<div class = 'col-md-3'></div>
+<div class = 'col-md-6' id = 'golinks-container'>
+  <ul class = 'list-group'>
+    <li ng-repeat = 'golink in golinks' class = 'list-group-item block'>
+    <div ng-if = 'golink.image != null' class = 'pull-right'>
+      <img src = '{{golink.image.url()}}' class = 'golink-img'>
+    </div>
+    <img src = 'http://www.google.com/s2/favicons?domain_url={{golink.url}}'>
+    <a href = '{{golink.url}}' target = '_blank'>{{golink.key}}</a>
+    <div>{{golink.title}}</div>
+    <div class = 'text-muted'>{{golink.createdAt}}</div>
+    <div class = 'text-muted'>{{golink.member_email}}</div>
+    </li>
+  </ul>
+</div>
+<div class = 'col-md-3'></div>
